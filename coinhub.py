@@ -16,6 +16,7 @@ user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Ge
 chrome_options.add_argument(f'user-agent={user_agent}')
 import botocore
 import boto3
+import uuid
 
 s3 = boto3.client("s3")
 
@@ -31,17 +32,20 @@ def coinhub():
     coins = []
     for key, val in data['data'].items():
         timestamp = val['timestamp'] / 1000
-        coin = [datetime.now(),
-                datetime.now().date(),
-                datetime.fromtimestamp(timestamp),
+        coin = [str(datetime.now()),
+                str(datetime.now().date()),
+                str(datetime.fromtimestamp(timestamp)),
                 'coinhub',
-                val['market'],
-                val['change'],
-                val['volume'],
-                val['high'],
-                val['low'],
-                val['open']]
-        coins.append(coin)
+                str(uuid.uuid4()),
+                str(val['market']),
+                str(val['change']),
+                str(val['volume']),
+                str(val['high']),
+                str(val['low']),
+                str(val['open'])]
+        txt = ' '.join(map(str, coin))
+        txt_line = txt + '\n'
+        coins.append(txt_line)
     # field names
     fields = ['created_at', 'date', 'market_time', 'exchange_name', 'name', 'diff', 'volume', 'max24', 'min24', 'last_price']
     # name of csv file

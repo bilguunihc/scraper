@@ -3,6 +3,7 @@ import requests
 import time
 import csv
 import boto3
+import uuid
 
 s3 = boto3.client("s3")
 
@@ -26,19 +27,22 @@ def trade():
             min_max = response.json()
             coin = []
             try:
-                coin = [datetime.now(),
-                        datetime.now().date(),
-                        pair['createDate'],
+                coin = [str(datetime.now()),
+                        str(datetime.now().date()),
+                        str(pair['createDate']),
                         'trade',
-                        pair['name'],
-                        pair['diff'],
-                        pair['q'],
-                        min_max[0]['max24'],
-                        min_max[0]['min24'],
-                        pair['lastPrice']]
+                        str(uuid.uuid4()),
+                        str(pair['name']),
+                        str(pair['diff']),
+                        str(pair['q']),
+                        str(min_max[0]['max24']),
+                        str(min_max[0]['min24']),
+                        str(pair['lastPrice'])]
             except:
                 pass
-            coins.append(coin)
+            txt = ' '.join(map(str, coin))
+            txt_line = txt + '\n'
+            coins.append(txt_line)
             
         # field names
         fields = ['created_at', 'date', 'market_time', 'exchange_name', 'name', 'diff', 'volume', 'max24', 'min24', 'last_price']

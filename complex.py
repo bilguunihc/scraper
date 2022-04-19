@@ -16,6 +16,7 @@ chrome_options.add_argument("--headless")
 user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
 chrome_options.add_argument(f'user-agent={user_agent}')
 import boto3
+import uuid
 
 s3 = boto3.client("s3")
 
@@ -35,17 +36,20 @@ def complex():
     coins = []
     for row in table.find_elements_by_xpath(".//tr"):
         data = [td.text for td in row.find_elements_by_tag_name("td")]
-        coin = [datetime.now(),
-                datetime.now().date(),
-                datetime.now(),
+        coin = [str(datetime.now()),
+                str(datetime.now().date()),
+                str(datetime.now()),
                 'complex',
-                data[0].replace('\n', ''),
-                data[2].replace('%', ''),
-                data[3].split()[0].replace(',', ''),
-                data[5].split()[0].replace(',', ''),
-                data[4].split()[0].replace(',', ''),
-                data[1].split()[0].replace(',', '')]
-        coins.append(coin)
+                str(uuid.uuid4()),
+                str(data[0].replace('\n', '')),
+                str(data[2].replace('%', '')),
+                str(data[3].split()[0].replace(',', '')),
+                str(data[5].split()[0].replace(',', '')),
+                str(data[4].split()[0].replace(',', '')),
+                str(data[1].split()[0].replace(',', ''))]
+        txt = ' '.join(map(str, coin))
+        txt_line = txt + '\n'
+        coins.append(txt_line)
 
     with open(filename, 'w') as csvfile:
         # creating a csv writer object

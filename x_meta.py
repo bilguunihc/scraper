@@ -3,6 +3,7 @@ import requests
 import time
 import csv
 import boto3
+import uuid
 
 s3 = boto3.client("s3")
 
@@ -13,17 +14,20 @@ def x_meta():
         response = requests.get(url_1)
         data = response.json()
         timestamp = data['timestamp'] / 1000
-        coin = [datetime.now(),
-                datetime.now().date(),
-                datetime.fromtimestamp(timestamp),
+        coin = [str(datetime.now()),
+                str(datetime.now().date()),
+                str(datetime.fromtimestamp(timestamp)),
                 'x-meta',
-                data['data']['symbol'],
-                data['data']['change24h'],
-                data['data']['amount'],
-                data['data']['high'],
-                data['data']['low'],
-                data['data']['close']]
-        coins.append(coin)
+                str(uuid.uuid4()),
+                str(data['data']['symbol']),
+                str(data['data']['change24h']),
+                str(data['data']['amount']),
+                str(data['data']['high']),
+                str(data['data']['low']),
+                str(data['data']['close'])]
+        txt = ' '.join(map(str, coin))
+        txt_line = txt + '\n'
+        coins.append(txt_line)
         url_2 = 'https://www.x-meta.com/v1/market/trading-pair?symbol=IHC_MNTC'
         response = requests.get(url_2)
         data = response.json()
@@ -32,13 +36,16 @@ def x_meta():
                 datetime.now().date(),
                 datetime.fromtimestamp(timestamp),
                 'x-meta',
+                str(uuid.uuid4()),
                 data['data']['symbol'],
                 data['data']['change24h'],
                 data['data']['amount'],
                 data['data']['high'],
                 data['data']['low'],
                 data['data']['close']]
-        coins.append(coin)
+        txt = ' '.join(map(str, coin))
+        txt_line = txt + '\n'
+        coins.append(txt_line)
         url_3 = 'https://www.x-meta.com/v1/market/trading-pair?symbol=SHIB_MNTC'
         response = requests.get(url_3)
         data = response.json()
@@ -47,13 +54,16 @@ def x_meta():
                 datetime.now().date(),
                 datetime.fromtimestamp(timestamp),
                 'x-meta',
+                str(uuid.uuid4()),
                 data['data']['symbol'],
                 data['data']['change24h'],
                 data['data']['amount'],
                 data['data']['high'],
                 data['data']['low'],
                 data['data']['close']]
-        coins.append(coin)
+        txt = ' '.join(map(str, coin))
+        txt_line = txt + '\n'
+        coins.append(txt_line)
         
         # field names
         fields = ['created_at', 'date', 'market_time', 'exchange_name', 'name', 'diff', 'volume', 'max24', 'min24', 'last_price']

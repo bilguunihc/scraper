@@ -15,6 +15,7 @@ chrome_options.add_argument("--headless")
 user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
 chrome_options.add_argument(f'user-agent={user_agent}')
 import boto3
+import uuid
 
 s3 = boto3.client("s3")
     
@@ -42,19 +43,22 @@ def idax():
             low = rows[4].getText()
             volume = rows[5].getText()
             
-            coin = [datetime.now(),
-                    datetime.now().date(),
-                    datetime.now(),
+            coin = [str(datetime.now()),
+                    str(datetime.now().date()),
+                    str(datetime.now()),
                     'idax',
-                    name,
-                    change,
-                    volume,
-                    high,
-                    low,
-                    latest_price
+                    str(uuid.uuid4()),
+                    str(name),
+                    str(change),
+                    str(volume),
+                    str(high),
+                    str(low),
+                    str(latest_price)
                     ]
-            coins.append(coin)
-            print('davtalt: ',coin)
+            txt = ' '.join(map(str, coin))
+            txt_line = txt + '\n'
+            coins.append(txt_line)
+
         fields = ['created_at', 'date', 'market_time', 'exchange_name', 'name', 'diff', 'volume', 'max24', 'min24', 'last_price']
         timestr = time.strftime("%Y%m%d-%H%M%S")
         # name of csv file

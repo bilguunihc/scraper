@@ -5,6 +5,7 @@ import time
 import csv
 import botocore
 import boto3
+import uuid
 
 s3 = boto3.client("s3")
 
@@ -29,17 +30,20 @@ def dax():
     coins = []
     coins.append(fields)
     for pair in pairs:
-        coin = [datetime.now(),
-                datetime.now().date(),
-                pair['price']['last_price_dt'],
+        coin = [str(datetime.now()),
+                str(datetime.now().date()),
+                str(pair['price']['last_price_dt']),
                 'dax',
-                pair['symbol'],
-                pair['stats24']['change24h'],
-                pair['stats24']['vol'],
-                pair['stats24']['high'],
-                pair['stats24']['low'],
-                pair['price']['last_price']]
-        coins.append(coin)
+                str(uuid.uuid4()),
+                str(pair['symbol']),
+                str(pair['stats24']['change24h']),
+                str(pair['stats24']['vol']),
+                str(pair['stats24']['high']),
+                str(pair['stats24']['low']),
+                str(pair['price']['last_price'])]
+        txt = ' '.join(map(str, coin))
+        txt_line = txt + '\n'
+        coins.append(txt_line)
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
